@@ -7,7 +7,7 @@ import torch.optim as optim
 import numpy as np
 
 # import program_learning
-from algorithms import ASTAR_NEAR, IDDFS_NEAR, MC_SAMPLING, ENUMERATION, GENETIC, RNN_BASELINE
+from algorithms import ASTAR_NEAR, IDDFS_NEAR, MC_SAMPLING, MCTS, ENUMERATION, GENETIC, RNN_BASELINE
 from dsl_current import DSL_DICT, CUSTOM_EDGE_COSTS
 from eval import test_set_eval
 from program_graph import ProgramGraph
@@ -85,7 +85,7 @@ def parse_args():
 
     # Args for algorithms
     parser.add_argument('--algorithm', type=str, required=True, 
-                        choices=["mc-sampling", "enumeration", "genetic", "astar-near", "iddfs-near", "rnn"],
+                        choices=["mc-sampling", "mcts", "enumeration", "genetic", "astar-near", "iddfs-near", "rnn"],
                         help="the program learning algorithm to run")
     parser.add_argument('--frontier_capacity', type=int, required=False, default=float('inf'),
                         help="capacity of frontier for A*-NEAR and IDDFS-NEAR")
@@ -191,6 +191,8 @@ if __name__ == '__main__':
             performance_multiplier=args.performance_multiplier, depth_bias=args.depth_bias, exponent_bias = args.exponent_bias)
     elif args.algorithm == "mc-sampling":
         algorithm = MC_SAMPLING(num_mc_samples=args.num_mc_samples)
+    elif args.algorithm == "mcts":
+        algorithm = MCTS(num_mc_samples=args.num_mc_samples)
     elif args.algorithm == "enumeration":
         algorithm = ENUMERATION(max_num_programs=args.max_num_programs)
     elif args.algorithm == "genetic":
